@@ -11,7 +11,10 @@ package Common;
 public class Utils {
     public static final int LOGIN = 1;
     public static final int LOGINFAIL = 2;
-    public static final int ACCEPT = 3;
-    public static final int DENY = 4;
-    public static final int FINDING = 5;
+    public static final int WAIT = 3;
+    public static final int REQUEST = 4;
+    public static final int ACCEPT = 5;
+    public static final int DENY = 6;
+    public static final int STARTCHAT = 7;
+    
 }

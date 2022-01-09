@@ -45,8 +45,13 @@ public class ClientHandler extends Thread {
             System.out.println("Loi gui data.");
         }
     }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
     
     public void initList() {
+        listName = new ArrayList<>();
         for (String a : Server.map.keySet()) {
             if (Server.map.get(a).status == 0 && !Server.map.get(a).nickname.equals(nickname)) {
                 listName.add(Server.map.get(a).nickname);
@@ -55,12 +60,24 @@ public class ClientHandler extends Thread {
     }
     
     public void Finding() {
-        if (listName.isEmpty()) {
-            
+        if (listName.isEmpty() || listName == null) {
+            Send(Utils.WAIT, "Đợi người dùng khác.");
+            System.out.println("Empty");
+            return;
         }
         for (String s : listName) {
-            
+            if (Server.map.containsKey(s) && Server.map.get(s).status==0) {
+                //hàm ghép đôi
+                setStatus(1);
+                Server.map.get(s).setStatus(1);
+                Send(Utils.REQUEST, "" + Server.map.get(s).nickname + "");
+                Server.map.get(s).Send(Utils.REQUEST, "" + nickname + "");
+                System.out.println("Chờ chấp nhận");
+                return;
+            }
         }
+        Send(Utils.WAIT, "Đợi người dùng khác");
+        System.out.println("Waiting");
 //        if (Server.map)
     }
 
@@ -79,8 +96,15 @@ public class ClientHandler extends Thread {
                             Server.map.put(name, this);
                             nickname = name;
                             initList();
-                            Send(Utils.LOGIN, "OK");
+                            Finding();
+//                            Send(Utils.LOGIN, "OK");
                         }
+                        break;
+                    }
+                    case Utils.ACCEPT: {
+                        break;
+                    }
+                    case Utils.DENY: {
                         break;
                     }
                 }

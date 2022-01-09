@@ -6,6 +6,8 @@ package Client;
 
 import Common.Message;
 import Common.Utils;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.IOException;
 import java.net.Socket;
 import javax.swing.JOptionPane;
@@ -22,6 +24,8 @@ public class StartApp extends javax.swing.JFrame implements InReceive {
      */
     public StartApp() {
         initComponents();
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
         ConnectToServer();
         setVisible(true);
     }
@@ -152,9 +156,14 @@ public class StartApp extends javax.swing.JFrame implements InReceive {
     @Override
     public void Receive(Message mess) {
         switch (mess.type) {
-            case Utils.LOGIN: {
+            case Utils.WAIT: {
                 new Waiting(serverListener);
 //                JOptionPane.showMessageDialog(this, (String) mess.obj);
+                dispose();
+                break;
+            }
+            case Utils.REQUEST: {
+                new Request(serverListener, (String) mess.obj);
                 dispose();
                 break;
             }
