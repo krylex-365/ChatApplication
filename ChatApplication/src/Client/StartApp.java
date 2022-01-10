@@ -114,7 +114,11 @@ public class StartApp extends javax.swing.JFrame implements InReceive {
 
     private void jBtnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnRegisterActionPerformed
         // TODO add your handling code here:
-        serverListener.Send(Utils.LOGIN, (String) jTextNickname.getText());
+        if (!jTextNickname.getText().trim().equals("")) {
+            serverListener.Send(Utils.LOGIN, (String) jTextNickname.getText());
+        } else {
+            JOptionPane.showMessageDialog(this, "Nickname không hợp lệ!");
+        }
     }//GEN-LAST:event_jBtnRegisterActionPerformed
 
     /**
@@ -157,7 +161,7 @@ public class StartApp extends javax.swing.JFrame implements InReceive {
     public void Receive(Message mess) {
         switch (mess.type) {
             case Utils.WAIT: {
-                new Waiting(serverListener);
+                new Waiting(serverListener, (String) mess.obj);
 //                JOptionPane.showMessageDialog(this, (String) mess.obj);
                 dispose();
                 break;

@@ -23,18 +23,15 @@ public class ClientHandler extends Thread {
     String nickname;
     int status = 0;
     ArrayList<String> listName;
+    ClientHandler thatClient;
     Socket socket;
     ObjectInputStream in;
     ObjectOutputStream out;
 
     public ClientHandler(Socket socket) throws IOException {
-        System.out.println("1");
         this.socket = socket;
-        System.out.println("2");
         out = new ObjectOutputStream(socket.getOutputStream());
-        System.out.println("4");
         in = new ObjectInputStream(socket.getInputStream());
-        System.out.println("3");
     }
 
     public void Send(int type, Object obj) {
@@ -49,7 +46,7 @@ public class ClientHandler extends Thread {
     public void setStatus(int status) {
         this.status = status;
     }
-    
+
     public void initList() {
         listName = new ArrayList<>();
         for (String a : Server.map.keySet()) {
@@ -58,27 +55,56 @@ public class ClientHandler extends Thread {
             }
         }
     }
-    
+
+    public void updateList(String thatUser) {
+        listName = new ArrayList<>();
+        for (String a : Server.map.keySet()) {
+            if (Server.map.get(a).status == 0 && !Server.map.get(a).nickname.equals(nickname)
+                    && !Server.map.get(a).nickname.equals(thatUser)) {
+                listName.add(Server.map.get(a).nickname);
+            }
+        }
+    }
+
+    public void setStatusWait(String thisUser, String thatUser) {
+        if (Server.map.containsKey(thisUser)) {
+            Server.map.get(thisUser).setStatus(0);
+        }
+        if (Server.map.containsKey(thatUser)) {
+            Server.map.get(thatUser).setStatus(0);
+        }
+    }
+
     public void Finding() {
         if (listName.isEmpty() || listName == null) {
-            Send(Utils.WAIT, "Đợi người dùng khác.");
+            Send(Utils.WAIT, "" + nickname + "");
             System.out.println("Empty");
             return;
         }
         for (String s : listName) {
-            if (Server.map.containsKey(s) && Server.map.get(s).status==0) {
+            if (Server.map.containsKey(s) && Server.map.get(s).status == 0) {
                 //hàm ghép đôi
+                thatClient = Server.map.get(s);
+                thatClient.thatClient = this;
                 setStatus(1);
-                Server.map.get(s).setStatus(1);
-                Send(Utils.REQUEST, "" + Server.map.get(s).nickname + "");
-                Server.map.get(s).Send(Utils.REQUEST, "" + nickname + "");
+                thatClient.setStatus(1);
+                Send(Utils.REQUEST, "" + thatClient.nickname + "");
+                thatClient.Send(Utils.REQUEST, "" + nickname + "");
+//                System.out.println("status thatClient: " + thatClient.status);
+//                System.out.println("status thatClientMap: " + Server.map.get(s).status);
                 System.out.println("Chờ chấp nhận");
                 return;
             }
         }
-        Send(Utils.WAIT, "Đợi người dùng khác");
+        Send(Utils.WAIT, "" + nickname + "");
         System.out.println("Waiting");
 //        if (Server.map)
+    }
+
+    public void sendChat(ClientHandler client, String str) {
+        if (thatClient != null) {
+            thatClient.Send(Utils.RECEIVECHAT, nickname + ": " + str);
+        }
     }
 
     @Override
@@ -102,14 +128,54 @@ public class ClientHandler extends Thread {
                         break;
                     }
                     case Utils.ACCEPT: {
+                        String thatUser = (String) m.obj;
+                        status = 2;
+                        if (thatClient.status == 2) {
+                            Send(Utils.STARTCHAT, thatUser);
+                            thatClient.Send(Utils.STARTCHAT, nickname);
+                        } else {
+                            Send(Utils.WAITCHAT, thatUser);
+                        }
                         break;
                     }
                     case Utils.DENY: {
+//                        String thatUser = (String) m.obj;
+                        // update list cho user bị deny
+//                        setStatusWait(nickname, thatUser);
+                        setStatus(0);
+                        thatClient.Send(Utils.BEDENIED, "");
+//                        Server.map.get(thatUser).Send(status, out);
+                        // update list cho user deny
+//                        updateList(thatUser);
+                        thatClient = null;
+                        Send(Utils.DENY, nickname);
+                        break;
+                    }
+                    case Utils.FINDOTHER: {
+                        setStatus(0);
+                        updateList(thatClient.nickname);
+                        thatClient = null;
+                        Finding();
+                        break;
+                    }
+                    case Utils.CHAT: {
+                        String chat = (String) m.obj + "\n";
+                        sendChat(thatClient, chat);
+                        break;
+                    }
+                    case Utils.OUTCHAT: {
+                        setStatus(0);
+                        thatClient.Send(Utils.BEDENIED, "");
+                        thatClient = null;
+                        Finding();
                         break;
                     }
                 }
             }
         } catch (IOException ex) {
+            if (thatClient != null) {
+                thatClient.Send(Utils.BEDENIED, "");
+            }
             Server.map.remove(nickname);
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);

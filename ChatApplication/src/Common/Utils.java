@@ -15,6 +15,11 @@ public class Utils {
     public static final int REQUEST = 4;
     public static final int ACCEPT = 5;
     public static final int DENY = 6;
-    public static final int STARTCHAT = 7;
-    
+    public static final int BEDENIED = 7;
+    public static final int FINDOTHER = 8;
+    public static final int WAITCHAT = 9;
+    public static final int STARTCHAT = 10;
+    public static final int CHAT = 11;
+    public static final int RECEIVECHAT = 12;
+    public static final int OUTCHAT = 13;
 }
