@@ -1,0 +1,64 @@
+Server - list người dùng (object)
+client {
+- tên người dùng
+- status (chờ 0, đang đợi trả lời 1, đồng ý ghép/đang chat 2)
+- list đối tượng ghép (tên người dùng)
+- clientThat
+- socket
+- in
+- out
+}
+
+A vào -> chờ
+- thêm A vào list người dùng
+- cấp cho A 1 list đối tượng ghép = list người dùng trừ A
+
+B vào -> chờ
+- thêm B vào list người dùng
+- cấp cho B 1 list đối tượng ghép = list người dùng trừ B
+
+
+Client - Mỗi khi 1 client vào app
+0 - nhập nickname
+1 - check trống / trùng nickname (yes: báo lỗi, no: đi tiếp)
+2 - thêm client vào list người dùng (status 0)
+3 - cấp cho client list đối tượng ghép (list người dùng status 0, không gồm client)
+4 - hàm tìm đối tượng ghép
+	+ if (list đtg size = 0)
+		+ client chờ -> return
+	+ random (list đối tượng ghép)
+		+ kiểm tra đối tượng ghép còn trong list người dùng không?
+			+ ghép client với người dùng status 0 (*)
+			+ trả giao diện chờ chấp nhận chat cho 2 bên
+			+ set status = 1 cho cả 2
+			+ break
+	+ nếu hết list đối tượng ghép vẫn không ghép đc thì đưa tới giao diện chờ
+
+(*)
+- nếu 1 trong 2 từ chối ghép
+	+ người từ chối
+		+ set status = 0
+		+ quay lại giao diện đợi (bị động - chờ 1 client khác tới ghép)
+	+ người bị từ chối
+		+ cập nhật list đối tượng ghép có status = 0 và không bao gồm "người từ chối"
+		+ set status = 0
+		+ quay lại bước 4 (chủ động - tìm 1 client khác để ghép)
+- nếu 1 trong 2 đồng ý
+	+ set status = 2
+- nếu cả 2 đều đồng ý (2 người trong cặp ghép có status = 2)
+	+ giao diện - chức năng chat
+- kết thúc chat
+	+ thoát khỏi phòng chat
+		+ set status client và người dùng = 0
+		+ cập nhật list đối tượng ghép có status = 0 cho cả 2 và không bao gồm đối phương vừa chat
+		+ quay lại bước 4
+	+ đóng app
+		+ xóa người đóng khỏi list người dùng
+		+ cập nhật list đối tượng ghép có status = 0
+		+ set status = 0
+		+ quay lại bước 4 
+- tắt app -> xóa client khỏi list người dùng
+
+================================================================
+
+
