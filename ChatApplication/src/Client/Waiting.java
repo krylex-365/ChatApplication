@@ -18,17 +18,18 @@ import javax.swing.JOptionPane;
 public class Waiting extends javax.swing.JFrame implements InReceive {
 
     ServerListener serverListener;
-
+    String nickName;
     /**
      * Creates new form Waiting
      */
-    public Waiting(ServerListener serverListener, String nickname) {
+    public Waiting(ServerListener serverListener, String nickName) {
         initComponents();
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
         this.serverListener = serverListener;
         this.serverListener.receive = this;
-        jLbNickname.setText("Nickname: " + nickname);
+        this.nickName = nickName;
+        jLbNickname.setText("Nickname: " + this.nickName);
         setVisible(true);
     }
 
@@ -46,7 +47,6 @@ public class Waiting extends javax.swing.JFrame implements InReceive {
         jLbNickname = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(500, 200));
         setMinimumSize(new java.awt.Dimension(500, 200));
         setResizable(false);
 
@@ -184,7 +184,7 @@ public class Waiting extends javax.swing.JFrame implements InReceive {
     public void Receive(Message mess) {
         switch (mess.type) {
             case Utils.REQUEST: {
-                new Request(serverListener, (String) mess.obj);
+                new Request(serverListener, (String) mess.obj, this.nickName);
                 dispose();
 //                JOptionPane.showMessageDialog(this, (String) mess.obj);
                 break;

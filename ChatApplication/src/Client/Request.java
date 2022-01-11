@@ -16,16 +16,19 @@ import javax.swing.JOptionPane;
  */
 public class Request extends javax.swing.JFrame implements InReceive {
     ServerListener serverListener;
+    String nickName;
     /**
      * Creates new form Request
      */
-    public Request(ServerListener serverListener, String thatUser) {
+    public Request(ServerListener serverListener, String thatUser, String nickName) {
         initComponents();
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
         this.serverListener = serverListener;
         this.serverListener.receive = this;
+        this.nickName = nickName;
         jLbUser.setText(thatUser);
+        jLbNickname.setText("Nickname: " + this.nickName);
         setVisible(true);
     }
     
@@ -52,6 +55,7 @@ public class Request extends javax.swing.JFrame implements InReceive {
         jBtnDeny = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLbUser = new javax.swing.JLabel();
+        jLbNickname = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(500, 200));
@@ -82,33 +86,41 @@ public class Request extends javax.swing.JFrame implements InReceive {
         jLbUser.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLbUser.setText("Tên");
 
+        jLbNickname.setText("Tên");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(103, 103, 103)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(103, 103, 103)
                         .addComponent(jBtnAccept)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jBtnDeny))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(86, 86, 86)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLbUser, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap()
+                        .addComponent(jLbNickname, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 217, Short.MAX_VALUE)))
                 .addGap(101, 101, 101))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(189, 189, 189)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLbUser, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(33, 33, 33)
+                .addContainerGap()
+                .addComponent(jLbNickname, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(1, 1, 1)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLbUser, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBtnAccept, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBtnDeny, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -131,13 +143,13 @@ public class Request extends javax.swing.JFrame implements InReceive {
 
     private void jBtnDenyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnDenyActionPerformed
         // TODO add your handling code here:
-        serverListener.Send(Utils.DENY, (String) jLbUser.getText());
+        serverListener.send(Utils.DENY, (String) jLbUser.getText());
     }//GEN-LAST:event_jBtnDenyActionPerformed
 
     private void jBtnAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAcceptActionPerformed
         // TODO add your handling code here:
         jBtnAccept.setEnabled(false);
-        serverListener.Send(Utils.ACCEPT, (String) jLbUser.getText());
+        serverListener.send(Utils.ACCEPT, (String) jLbUser.getText());
     }//GEN-LAST:event_jBtnAcceptActionPerformed
 
     /**
@@ -180,6 +192,7 @@ public class Request extends javax.swing.JFrame implements InReceive {
     private javax.swing.JButton jBtnAccept;
     private javax.swing.JButton jBtnDeny;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLbNickname;
     private javax.swing.JLabel jLbUser;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
@@ -190,23 +203,24 @@ public class Request extends javax.swing.JFrame implements InReceive {
             case Utils.WAITCHAT: {
 //                dispose();
 //                new Waiting(serverListener);
-                JOptionPane.showMessageDialog(this, "Chờ đối phương đồng ý.");
+//                JOptionPane.showMessageDialog(this, "Chờ đối phương đồng ý.");
+                jLabel1.setText("Chờ đối phương đồng ý");
                 break;
             }
             case Utils.STARTCHAT: {
-                new Chat(serverListener, (String) mess.obj);
+                new Chat(serverListener, (String) mess.obj, this.nickName);
                 dispose();
                 break;
             }
-            case Utils.DENY: {
-//                JOptionPane.showMessageDialog(this, (String) mess.obj);
-                new Waiting(serverListener, (String) mess.obj);
-                dispose();
-                break;
-            }
+//            case Utils.DENY: {
+////                JOptionPane.showMessageDialog(this, (String) mess.obj);
+//                new Waiting(serverListener, (String) mess.obj);
+//                dispose();
+//                break;
+//            }
             case Utils.BEDENIED: {
                 JOptionPane.showMessageDialog(this, "Đối phương không đồng ý.");
-                serverListener.Send(Utils.FINDOTHER, "");
+                serverListener.send(Utils.FINDOTHER, "");
                 break;
             }
             case Utils.WAIT: {
@@ -216,7 +230,7 @@ public class Request extends javax.swing.JFrame implements InReceive {
                 break;
             }
             case Utils.REQUEST: {
-                new Request(serverListener, (String) mess.obj);
+                new Request(serverListener, (String) mess.obj, this.nickName);
                 dispose();
                 break;
             }

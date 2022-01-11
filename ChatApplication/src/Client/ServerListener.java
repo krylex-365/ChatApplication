@@ -39,7 +39,7 @@ public class ServerListener extends Thread {
         out = new ObjectOutputStream(outputStream);
     }
 
-    public void Send(int type, Object obj) {
+    public void send(int type, Object obj) {
         try {
             out.reset();
             out.writeObject(new Message(type, obj));

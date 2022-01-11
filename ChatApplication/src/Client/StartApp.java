@@ -114,10 +114,13 @@ public class StartApp extends javax.swing.JFrame implements InReceive {
 
     private void jBtnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnRegisterActionPerformed
         // TODO add your handling code here:
-        if (!jTextNickname.getText().trim().equals("")) {
-            serverListener.Send(Utils.LOGIN, (String) jTextNickname.getText());
+        String name = jTextNickname.getText().trim();
+        if (name.equals("")) {
+            JOptionPane.showMessageDialog(this, "Nickname không được bỏ trống!");
+        } else if (name.length() > 30) {
+            JOptionPane.showMessageDialog(this, "Nickname không vượt quá 30 kí tự!");
         } else {
-            JOptionPane.showMessageDialog(this, "Nickname không hợp lệ!");
+            serverListener.send(Utils.LOGIN, name);
         }
     }//GEN-LAST:event_jBtnRegisterActionPerformed
 
@@ -167,7 +170,7 @@ public class StartApp extends javax.swing.JFrame implements InReceive {
                 break;
             }
             case Utils.REQUEST: {
-                new Request(serverListener, (String) mess.obj);
+                new Request(serverListener, (String) mess.obj, (String) jTextNickname.getText().trim());
                 dispose();
                 break;
             }

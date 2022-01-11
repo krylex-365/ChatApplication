@@ -17,16 +17,17 @@ import javax.swing.JOptionPane;
  */
 public class Chat extends javax.swing.JFrame implements InReceive {
     ServerListener serverListener;
-
+    String nickName;
     /**
      * Creates new form Chat
      */
-    public Chat(ServerListener serverListener, String thatUser) {
+    public Chat(ServerListener serverListener, String thatUser, String nickName) {
         initComponents();
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
         this.serverListener = serverListener;
         this.serverListener.receive = this;
+        this.nickName = nickName;
         jLbThatUser.setText(thatUser);
         setVisible(true);
     }
@@ -159,10 +160,10 @@ public class Chat extends javax.swing.JFrame implements InReceive {
 
     private void jBtnSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnSendActionPerformed
         //SendButton.setBackground(Color.yellow);
-        String chat = jTextAreaInput.getText();
+        String chat = jTextAreaInput.getText().trim();
         if (!chat.equals("")) {
             chatBox.append("Bạn: " + chat + "\n");
-            serverListener.Send(Utils.CHAT, chat);
+            serverListener.send(Utils.CHAT, chat);
             jTextAreaInput.setText("");
         }
     }//GEN-LAST:event_jBtnSendActionPerformed
@@ -177,7 +178,7 @@ public class Chat extends javax.swing.JFrame implements InReceive {
         int confirm = JOptionPane.showConfirmDialog(this, "Bạn chắc chắn muốn thoát khỏi phòng chat?",
                 "Xác nhận", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
-            serverListener.Send(Utils.OUTCHAT, "");
+            serverListener.send(Utils.OUTCHAT, "");
         }
     }//GEN-LAST:event_jBtnThoatActionPerformed
 
@@ -238,7 +239,7 @@ public class Chat extends javax.swing.JFrame implements InReceive {
             }
             case Utils.BEDENIED: {
                 JOptionPane.showMessageDialog(this, "Đối phương thoát khỏi phòng chat.");
-                serverListener.Send(Utils.FINDOTHER, "");
+                serverListener.send(Utils.FINDOTHER, "");
                 break;
             }
             case Utils.WAIT: {
@@ -248,7 +249,7 @@ public class Chat extends javax.swing.JFrame implements InReceive {
                 break;
             }
             case Utils.REQUEST: {
-                new Request(serverListener, (String) mess.obj);
+                new Request(serverListener, (String) mess.obj, this.nickName);
                 dispose();
                 break;
             }

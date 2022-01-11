@@ -30,10 +30,13 @@ public class Server {
                 System.out.println("OK");
 //                users.add(user);
                 user.start();
-//                user.Send(1, "hello");
+//                user.send(1, "hello");
             }
         } catch (IOException ex) {
             System.out.println(ex);
+            for (String s : map.keySet()) {
+                map.get(s).close();
+            }
 //          Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
