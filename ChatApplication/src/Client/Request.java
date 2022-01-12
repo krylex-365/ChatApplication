@@ -60,7 +60,6 @@ public class Request extends javax.swing.JFrame implements InReceive {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(500, 200));
         setMinimumSize(new java.awt.Dimension(500, 200));
-        setUndecorated(true);
         setResizable(false);
 
         jPanel1.setMaximumSize(new java.awt.Dimension(500, 200));

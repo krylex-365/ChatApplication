@@ -188,6 +188,7 @@ public class ClientHandler extends Thread {
                     }
                     case Utils.OUTCHAT: {
                         setStatus(0);
+                        listDeny.add(thatClient.nickname);
                         updateList(thatClient.nickname);
                         thatClient.send(Utils.BEDENIED, "");
                         thatClient = null;
