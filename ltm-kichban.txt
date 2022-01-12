@@ -1,0 +1,36 @@
+1 vô -> list rỗng -> đợi -> bị động
+
+2 vô -> list có 1 -> ghép 1 -> chủ động
+
+3 vô -> list rỗng -> đợi -> bị động
+
+1 ghép 2 -> 1 từ chối -> + list deny của nhau 
+
+1 cập nhật list, gọi hàm finding
+
+1 ghép 3
+
+-> 2 popup, kẹt lại -> cập nhật list, gọi finding -> 2 đợi
+
+4 vô -> list có 2
+
+4 ghép 2 -> 2 từ chối
+
+2 cập nhật, finding -> đợi
+
+4 kẹt pop up -> cập nhật, finding -> đợi
+
+1 từ chối -> cập nhật, finding -> ghép 4
+
+3 popup -> cập nhật, finding -> ghép 2
+
+...
+
+lặp cho đến khi 
+- list deny của 1 có 3 đứa kia
+- ... 2
+- ... 3
+- ... 4
+
+thì cả 4 đều đợi
+khi 5 vào sẽ random 4 đứa đang đợi

@@ -65,7 +65,7 @@ public class ClientHandler extends Thread {
     public void initList() {
         listName = new ArrayList<>();
         for (String a : Server.map.keySet()) {
-            if (Server.map.get(a).status == 0 && !Server.map.get(a).nickname.equals(nickname)) {
+            if (Server.map.get(a).status == 0) {
                 listName.add(Server.map.get(a).nickname);
             }
         }
@@ -100,6 +100,9 @@ public class ClientHandler extends Thread {
         Random rand = new Random();
         String randUser = listName.get(rand.nextInt(listName.size()));
 //        System.out.println("rand: " + randUser);
+//        while () {
+//            
+//        }
         if (Server.map.containsKey(randUser)
                 && Server.map.get(randUser).status == 0) {
             //hàm ghép đôi
@@ -136,9 +139,9 @@ public class ClientHandler extends Thread {
                         if (Server.map.containsKey(name)) {
                             send(Utils.LOGINFAIL, "Nickname đã tồn tại!");
                         } else {
+                            initList();
                             Server.map.put(name, this);
                             nickname = name;
-                            initList();
                             finding();
                         }
                         break;
