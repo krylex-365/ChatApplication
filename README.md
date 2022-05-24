@@ -21,10 +21,10 @@ Client hoặc Random Client thoát khỏi phòng chat.
 
 # Giao diện ứng dụng
 - Tham gia (Join)
-![image](https://user-images.githubusercontent.com/63896058/169985466-8b58b433-1dd4-4e30-a955-44bf33edfaae.png)
+![image](https://user-images.githubusercontent.com/63896058/169986718-12a996de-bc62-479c-8553-2df66751e876.png)
 
 - Chờ ghép đôi (Waiting)
-![image](https://user-images.githubusercontent.com/63896058/169985676-8273a5b8-e685-4fef-a6a2-047ca75addd7.png)
+![image](https://user-images.githubusercontent.com/63896058/169986884-f223b5b7-268b-479c-9180-f1a8966a6613.png)
 
 - Xác nhận chat (Request)
 ![image](https://user-images.githubusercontent.com/63896058/169985805-9a831728-9bf3-4d13-800a-2106f623e27d.png)
