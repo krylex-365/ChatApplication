@@ -1,6 +1,9 @@
 # Chat Application
 > ![image](https://user-images.githubusercontent.com/63896058/170018177-96cf273a-da65-46d3-bffd-578ed7a1f3d7.png)
 
+# Kỹ thuật sử dụng
+Java Swing, Server-Client, TCP protocol, Multi-thread.
+
 # Mô tả chức năng
 - Tham gia (Join): Nhập nickname để tham gia chat.
 - Tìm kiếm đối tượng ghép (Finding): Tìm kiếm các Client khác đang ở trạng thái chờ đợi để tiến hành ghép ngẫu nhiên với Client.
